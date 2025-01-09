@@ -13,12 +13,15 @@ import { useCallback, useMemo } from "react";
 import useExchangeCurrency from "./hooks/useExchangeCurrency";
 import Loader from "@/components/ui/Loader/Loader";
 import Button from "@/components/ui/Button/Button";
+import useDebounce from "@/utils/hooks/useDebounce";
 
 const ExchangeFrom = () => {
   const { data: currencies } = useGetCurrencies();
 
   const dispatch = useAppDispatch();
   const exchangeSlice = useAppSelector((state) => state.exchangeRateSlice);
+
+  const debouncedAmount = useDebounce(exchangeSlice.exchangeAmount, 1200);
 
   const { data: exchangeData, isLoading: exchangeLoading } =
     useExchangeCurrency({
@@ -29,7 +32,7 @@ const ExchangeFrom = () => {
         exchangeSlice.exchangeFrom !== "" &&
         exchangeSlice.exchangeTo !== "" &&
         exchangeSlice.exchangeAmount !== "" &&
-        Number(exchangeSlice.exchangeAmount) > 0,
+        Number(debouncedAmount) > 0,
     });
 
   const handleAmountChange = useCallback(
@@ -48,6 +51,7 @@ const ExchangeFrom = () => {
     [dispatch, exchangeSlice],
   );
 
+
   const handleBlur = useCallback(() => {
     const { exchangeAmount } = exchangeSlice;
 
@@ -55,14 +59,21 @@ const ExchangeFrom = () => {
       dispatch(
         setExchangeValues({
           ...exchangeSlice,
-          exchangeAmount: (0.0).toFixed(1),
+          exchangeAmount: "0.0",
+        }),
+      );
+    } else if (exchangeAmount.includes(".") && !exchangeAmount.split(".")[1]) {
+      dispatch(
+        setExchangeValues({
+          ...exchangeSlice,
+          exchangeAmount: `${exchangeAmount}0`,
         }),
       );
     } else {
       dispatch(
         setExchangeValues({
           ...exchangeSlice,
-          exchangeAmount: Number(exchangeAmount).toFixed(1),
+          exchangeAmount: exchangeAmount,
         }),
       );
     }
@@ -95,7 +106,7 @@ const ExchangeFrom = () => {
   }, [currencies?.data]);
 
   return (
-    <CardLayout className="relative h-auto w-full p-6 md:h-[20rem] lg:min-w-[60rem] lg:max-w-[60rem]">
+    <CardLayout className="relative h-auto max-w-[40rem] w-full p-6 md:h-[20rem] lg:min-w-[60rem] lg:max-w-[60rem]">
       {exchangeLoading && <Loader isLoading />}
 
       <div className="flex flex-col items-center gap-6 px-4 py-6 md:flex-row md:gap-4">
@@ -147,6 +158,7 @@ const ExchangeFrom = () => {
 
         <div className="flex items-center justify-center md:hidden">
           <div
+            role="swap-div"
             className="flex h-[40px] w-[40px] cursor-pointer items-center justify-center rounded-full border"
             onClick={handleSwapping}
           >
@@ -155,7 +167,7 @@ const ExchangeFrom = () => {
         </div>
       </div>
       {exchangeData && (
-        <div className="flex flex-col gap-2 px-5">
+        <div className="flex flex-col gap-3 px-5">
           <Button
             className="w-full rounded-full bg-[#4578cc] px-14 md:w-fit lg:w-fit"
             onClick={() => dispatch(resetExchangeValues())}
@@ -164,7 +176,7 @@ const ExchangeFrom = () => {
           </Button>
 
           <div className="w-full flex-grow">
-            <p className="block text-2xl">
+            <p className="block text-base md:text-2xl">
               {`${exchangeSlice.exchangeAmount} ${exchangeSlice.exchangeFrom} Equals ${exchangeData.data.conversion_result} ${exchangeSlice.exchangeTo}`}
             </p>
           </div>

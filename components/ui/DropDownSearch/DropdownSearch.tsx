@@ -67,7 +67,7 @@ const DropdownSearch = ({
   return (
     <div className="relative" ref={dropdownRef}>
       <div>
-        <Label htmlFor="">{label}</Label>
+        <Label htmlFor={name} value={label} />
       </div>
       <button
         aria-haspopup="listbox"
