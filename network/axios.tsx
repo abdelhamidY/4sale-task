@@ -1,4 +1,4 @@
-import GaragHeroToast from "@/utils/helpers/garagHeroToast/garageHeroToast";
+import fourSaleToast from "@/utils/helpers/fourSaleToast/fourSaleToats";
 import axiosDefault from "axios";
 const axios = axiosDefault.create({
   headers: {
@@ -12,7 +12,7 @@ axios.interceptors.response.use(
     return response;
   },
   async (error) => {
-    GaragHeroToast({
+    fourSaleToast({
       type: "error",
       title: error.code,
       description: error.message,

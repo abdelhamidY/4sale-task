@@ -24,6 +24,7 @@ const Loader = ({
       <div className="absolute inset-0 z-10 flex items-center justify-center bg-gray-500 bg-opacity-50">
         <div className="flex flex-col items-center">
           <svg
+            role="svg"
             className="h-10 w-10 animate-spin text-blue-500"
             xmlns="http://www.w3.org/2000/svg"
             fill="none"

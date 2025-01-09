@@ -9,7 +9,7 @@ import {
 } from "@/redux/slices/exchange.slice";
 import useGetCurrencies from "./hooks/useGetCurrencies";
 import { IoSwapHorizontalSharp } from "react-icons/io5";
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import useExchangeCurrency from "./hooks/useExchangeCurrency";
 import Loader from "@/components/ui/Loader/Loader";
 import Button from "@/components/ui/Button/Button";
@@ -26,21 +26,47 @@ const ExchangeFrom = () => {
       to: exchangeSlice.exchangeTo,
       amount: exchangeSlice.exchangeAmount,
       enabled:
-        exchangeSlice.exchangeFrom !== "" && exchangeSlice.exchangeTo !== "",
+        exchangeSlice.exchangeFrom !== "" &&
+        exchangeSlice.exchangeTo !== "" &&
+        exchangeSlice.exchangeAmount !== "" &&
+        Number(exchangeSlice.exchangeAmount) > 0,
     });
 
   const handleAmountChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const value = e.target.value;
-      dispatch(
-        setExchangeValues({
-          ...exchangeSlice,
-          exchangeAmount: value === "" ? (0.0).toFixed(1) : value,
-        }),
-      );
+
+      if (/^\d*\.?\d*$/.test(value) || value === "") {
+        dispatch(
+          setExchangeValues({
+            ...exchangeSlice,
+            exchangeAmount: value,
+          }),
+        );
+      }
     },
     [dispatch, exchangeSlice],
   );
+
+  const handleBlur = useCallback(() => {
+    const { exchangeAmount } = exchangeSlice;
+
+    if (!exchangeAmount || isNaN(Number(exchangeAmount))) {
+      dispatch(
+        setExchangeValues({
+          ...exchangeSlice,
+          exchangeAmount: (0.0).toFixed(1),
+        }),
+      );
+    } else {
+      dispatch(
+        setExchangeValues({
+          ...exchangeSlice,
+          exchangeAmount: Number(exchangeAmount).toFixed(1),
+        }),
+      );
+    }
+  }, [dispatch, exchangeSlice]);
 
   const handleExchangeChange = useCallback(
     (field: "exchangeFrom" | "exchangeTo", item: string) => {
@@ -82,6 +108,7 @@ const ExchangeFrom = () => {
             label="Amount"
             value={exchangeSlice.exchangeAmount}
             onChange={handleAmountChange}
+            onBlur={handleBlur}
           />
         </div>
 
@@ -130,7 +157,7 @@ const ExchangeFrom = () => {
       {exchangeData && (
         <div className="flex flex-col gap-2 px-5">
           <Button
-            className="w-fit rounded-full bg-[#4578cc] px-14"
+            className="w-full rounded-full bg-[#4578cc] px-14 md:w-fit lg:w-fit"
             onClick={() => dispatch(resetExchangeValues())}
           >
             Reset

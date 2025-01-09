@@ -1,6 +1,5 @@
-import { GaragHeroToastProps } from "@/utils/helpers/garagHeroToast/types";
-
+import { fourSaleToastProps } from "@/utils/helpers/fourSaleToast/types";
 export type ToastType = Pick<
-  GaragHeroToastProps,
+fourSaleToastProps,
   "title" | "description" | "type"
 >;

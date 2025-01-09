@@ -1,12 +1,12 @@
 import CustomToast from "@/components/shared/toast/Toast";
 import { toast } from "react-toastify";
-import { GaragHeroToastProps } from "./types";
-const GaragHeroToast = ({
+import { fourSaleToastProps } from "./types";
+const fourSaleToast = ({
   type,
   title,
   description,
   toastId,
-}: GaragHeroToastProps) => {
+}: fourSaleToastProps) => {
   return toast(
     <CustomToast title={title} description={description} type={type} />,
     {
@@ -23,4 +23,4 @@ const GaragHeroToast = ({
   );
 };
 
-export default GaragHeroToast;
+export default fourSaleToast;

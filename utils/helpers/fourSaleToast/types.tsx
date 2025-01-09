@@ -1,6 +1,6 @@
 import { ReactElement } from "react";
 
-export type GaragHeroToastProps = {
+export type fourSaleToastProps = {
   type: "success" | "error" | "warning" | "info" | "default";
   title?: string;
   description?: string;
@@ -8,5 +8,5 @@ export type GaragHeroToastProps = {
 };
 
 export type MapTypeToComponent = (
-  params: Omit<GaragHeroToastProps, "type">,
-) => Record<GaragHeroToastProps["type"], ReactElement>;
+  params: Omit<fourSaleToastProps, "type">,
+) => Record<fourSaleToastProps["type"], ReactElement>;

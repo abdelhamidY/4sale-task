@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { ThemeModeScript } from "flowbite-react/components/ThemeModeScript";
 import "./globals.css";
 import dynamic from "next/dynamic";
 import React, { Suspense } from "react";
@@ -50,9 +49,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={inter.className}>
-      <head>
-        <ThemeModeScript />
-      </head>
       <body>
         <Suspense fallback={<DefaultLoadingBoundary />}>
           <ReactReduxProvider>
