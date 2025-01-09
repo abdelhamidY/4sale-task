@@ -2,15 +2,15 @@
 
 Installation
 
-# Install dependencies
+## Install dependencies
 
 yarn
 
-# Run Project
+## Run Project
 
 yarn dev
 
-# Run Test Cases
+## Run Test Cases
 
 yarn test
 
