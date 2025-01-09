@@ -51,7 +51,6 @@ const ExchangeFrom = () => {
     [dispatch, exchangeSlice],
   );
 
-
   const handleBlur = useCallback(() => {
     const { exchangeAmount } = exchangeSlice;
 
@@ -106,7 +105,7 @@ const ExchangeFrom = () => {
   }, [currencies?.data]);
 
   return (
-    <CardLayout className="relative h-auto max-w-[40rem] w-full p-6 md:h-[20rem] lg:min-w-[60rem] lg:max-w-[60rem]">
+    <CardLayout className="relative h-auto w-full max-w-[40rem] p-6 md:h-[20rem] lg:min-w-[60rem] lg:max-w-[60rem]">
       {exchangeLoading && <Loader isLoading />}
 
       <div className="flex flex-col items-center gap-6 px-4 py-6 md:flex-row md:gap-4">
@@ -120,6 +119,7 @@ const ExchangeFrom = () => {
             value={exchangeSlice.exchangeAmount}
             onChange={handleAmountChange}
             onBlur={handleBlur}
+            placeholder={exchangeSlice.exchangeAmount ? "" : "0.0"}
           />
         </div>
 
